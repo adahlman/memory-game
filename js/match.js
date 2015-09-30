@@ -1,5 +1,8 @@
 (function($){
     var Card = Backbone.Model.extend({
+        defaults:{
+          flipped: false  
+        },
         set: function(attributes,options){
             Backbone.Model.prototype.set.apply(this, arguments);
         }
@@ -11,29 +14,57 @@
        tagName: 'article',
        className:'card',
        events: {
-        'click' : 'flip'
+        'click' : 'flip',
+        'webkitTransitionEnd': 'trans',
+        'transitionend': 'trans',
+        'msTransitionEnd' : 'trans'
        },
        initialize: function(){
-        _.bindAll(this, 'render','flip');
+        _.bindAll(this, 'render','flip','clearCard');
        },
        render: function(){
-            $(this.el).html('<span>'+this.model.attributes.number+'</span>');
+            $(this.el).html('<section class="flip-card"><article class="front">'+this.model.attributes.number+'</article><article class="back"></article></section>');
             return this;
        },
        flip: function(){
-        if (!deckView.card1) {
-            deckView.card1 = this;
-        }else{
-            if (this.model.attributes.number == deckView.card1.model.attributes.number) {
-                $(deckView.card1.el).hide();
-                $(this.el).hide();
-                if (!(--deckView.remainingCards)) {
-                     console.log('You win');
-                     return;
-                 }
+            if (this.model.get('flipped') || deckView.progress) {
+                return;
             }
-            deckView.card1 = null;
+            $(this.el).addClass('flipped').children().children('.back').css({'background-image': 'url('+ deckView.imagebase + deckView.cards[this.model.attributes.number - 1]+')'});
+            deckView.progress = true;
+            if (!deckView.card1) {
+                deckView.card1 = this;
+            }else{
+                if (this.model.attributes.number == deckView.card1.model.attributes.number) {
+                    if (!(--deckView.remainingCards)) {
+                         console.log('You win');
+                         return;
+                     }
+                }else{
+                    var curr = this;
+                    var x = deckView.card1;
+                    deckView.progress = true;
+                    setTimeout(function(){
+                      curr.clearCard();
+                      x.clearCard();
+                      }, 1000);
+                }
+                deckView.card1 = null;
+            }
+       },
+       trans: function(){
+        if (this.model.get('flipped')) {
+            $(this.el).children().children('.back').css({'background-image':''});
+            this.model.set({flipped: false});
+        }else{
+            this.model.set({flipped: true});
         }
+        deckView.progress = false;
+       },
+       clearCard: function(){
+        $(this.el).removeClass('flipped');
+        deckView.progress = true;
+
        }
     });
     var DeckView = Backbone.View.extend({
@@ -47,15 +78,22 @@
             _.bindAll(this,'render','newGame','addCard');
             this.collection = new CardDeck();
             this.collection.bind('add',this.addCard);
-            this.card1=null;
-            this.remainingCards= 5;
+            this.imagebase = 'https://playingcardcollector.files.wordpress.com/2013/02/playing_cards_by_mushfacecomics_';
+            this.cards = ['ace_of_spades.jpg','jack_of_spades.jpg','king_of_clubss.jpg','jack_of_hearts.jpg','jack_of_clubs.jpg','queen_of_diamonds.jpg',
+                          'jack_of_diamonds.jpg','king_of_hearts.jpg','king_of_spades.jpg','king_of_diamonds.jpg', 'queen_of_spades.jpg',
+                          'queen_of_hearts.jpg', 'queen_of_clubs.jpg'
+                          ];
             this.render();
         },
         render: function(){
-            $(this.el).append('<button id="newGame">Start new game</button><section id="card-container"></section>');
+            $(this.el).append('<button id="newGame">Start new game</button><section id="card-container" class="clearfix"></section>');
         },
         newGame: function(){
             $('#card-container').html('');
+            this.collection.reset();
+            this.remainingCards= 6;
+            this.card1=null;
+            this.progress = false;
             for(var i = 1; i <= this.remainingCards; i++){
                 for(var j =0; j < 2; j++){
                     var card = new Card({number: i});

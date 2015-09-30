@@ -1,0 +1,23 @@
+.floatLeft{ float: left;}
+.floatRight{ float: right;}
+a{outline: 0 !important;}
+.rel{position: relative;}
+.abs{position: absolute;}
+.autoMargin{margin: auto;}
+.bold{font-weight: bold;}
+.center{text-align: center;}
+.justify{text-align: justify;}
+.tleft{text-align: left;}
+.uppercase{text-transform: uppercase;}
+.hundred{width: 100%;}
+.hundred-h{height: 100%;}
+.blocked{display: block};
+.inl{display: inline-block;}
+.pointer{cursor: pointer;}
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.clear{clear: both;}
+

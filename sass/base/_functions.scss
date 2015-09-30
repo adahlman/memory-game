@@ -1,0 +1,96 @@
+@import "prefixer";
+@import "font-feature-settings";
+@mixin bkgrd_image($path, $position:"center center", $color:"",$repeat:"no-repeat"){
+  @if(unquote($repeat)==''){  $repeat:"no-repeat"; }
+  @if(unquote($position)==''){ $position:"center center";   }
+  @if(unquote($color)==''){ $color:"";   }
+  background: url($path) unquote($repeat) unquote($position) unquote($color);
+}
+/* Font-face ripped from bourbon.
+ * Order of the includes matters, and it is: normal, bold, italic, bold+italic.
+ * Example: @include font-face(SourceSansPro, "/fonts/Source_Sans_Pro/SourceSansPro-Italic", normal, italic);
+*/
+
+@mixin font-simple($font-family, $file-path, $weight: normal, $style: normal, $asset-pipeline: $asset-pipeline) {
+  @font-face {
+    font-family: $font-family;
+    font-weight: $weight;
+    font-style: $style;
+
+    @if $asset-pipeline == true {
+      src: font-url('#{$file-path}.eot');
+      src: font-url('#{$file-path}.eot?#iefix')          format('embedded-opentype'),
+           font-url('#{$file-path}.woff')                format('woff'),
+           font-url('#{$file-path}.ttf')                 format('truetype'),
+           font-url('#{$file-path}.svg##{$font-family}') format('svg');
+    } @else {
+      src: url('#{$file-path}.eot');
+      src: url('#{$file-path}.eot?#iefix')               format('embedded-opentype'),
+           url('#{$file-path}.woff')                     format('woff'),
+           url('#{$file-path}.ttf')                      format('truetype'),
+           url('#{$file-path}.svg##{$font-family}')      format('svg');
+    }
+  }
+}
+@mixin calc($property, $value) {
+  #{$property}: -webkit-calc(#{$value});
+  #{$property}:         calc(#{$value});
+}
+@mixin circle($size, $color, $display){
+    display: $display;
+    line-height: $size;
+    width: $size;
+    height: $size;
+    background: $color;
+    -webkit-border-radius: $size/2;
+    -moz-border-radius: $size/2;
+    border-radius: $size/2;
+}
+
+/*CSS triangle
+ *First direction ('u','d','l','r')
+ *Color of triangle
+ *one parameter for equilateral triangle
+ *two for isocles
+ *three all different
+*/
+@mixin arrow($direction,$color, $side, $side1:$side, $side2:$side1){
+      width: 0; 
+      height: 0;
+      position: absolute;
+      @if($direction == 'r' or $direction =='l'){
+        border-top: $side1 solid rgba(255,255,255,0);
+        border-bottom: $side2 solid rgba(255,255,255,0);
+        @if($direction == 'r'){
+          border-left: $side solid $color;
+        }
+        @else{
+          border-right: $side solid $color;
+        }
+      }
+      @else{
+        border-right: $side1 solid rgba(255,255,255,0);
+        border-left: $side2 solid rgba(255,255,255,0);
+        @if($direction == 'u'){
+          border-bottom: $side solid $color;
+        }
+        @else{
+          border-top: $side solid $color;
+        }
+      }
+      -moz-transform: scale(0.9999);
+      
+}
+@mixin pentagon($top, $w,$bw,$bc,$b_top,$b_left,$b_bw){
+    top: $top;
+    width: $w;
+    border-width: $bw 0 0;
+    border-color: $bc rgba(255,255,255,0);
+    &:before {
+            top: $b_top;
+            left: $b_left;
+            border-width: unquote($b_bw);
+            border-color: rgba(255,255,255,0) rgba(255,255,255,0) $bc;
+        }
+    -moz-transform: scale(0.9999);
+}

@@ -1,0 +1,46 @@
+@import "compass";
+@import "base/base";
+
+body{
+    #card-container{
+        width: 500px;
+        margin: auto;
+        .card{
+            width: 100px;
+            float: left;
+            margin: 10px;
+            perspective: 1000;
+            &.flipped{
+                .flip-card{
+                    @include rotateY(180deg);
+                }
+            }
+            .flip-card{
+                transition: 0.6s;
+                transform-style: preserve-3d;
+                height: 0;
+                padding: 70% 0;
+                position: relative;
+                .front,.back{
+                    @include bkgrd_image('https://s-media-cache-ak0.pinimg.com/736x/5c/d1/2d/5cd12dede90464b6d0200ab43dd46e41.jpg');
+                    background-size: 100%;
+                    backface-visibility: hidden;
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                }
+                .front{
+                    /*background: red;*/
+                    z-index: 2;
+                    @include rotateY(0deg);
+                }
+                .back{
+                    /*background: blue;*/
+                    @include rotateY(180deg);
+                }
+            }
+        }
+    }
+}
