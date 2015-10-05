@@ -23,7 +23,7 @@
         _.bindAll(this, 'render','flip','clearCard');
        },
        render: function(){
-            $(this.el).html('<section class="flip-card"><article class="front">'+this.model.attributes.number+'</article><article class="back"></article></section>');
+            $(this.el).html('<section class="flip-card"><article class="front"></article><article class="back"></article></section>');
             return this;
        },
        flip: function(){
@@ -75,18 +75,22 @@
         },
         
         initialize: function(){
-            _.bindAll(this,'render','newGame','addCard');
+            _.bindAll(this,'render','newGame','addCard', 'test');
             this.collection = new CardDeck();
             this.collection.bind('add',this.addCard);
             this.imagebase = 'https://playingcardcollector.files.wordpress.com/2013/02/playing_cards_by_mushfacecomics_';
             this.cards = ['ace_of_spades.jpg','jack_of_spades.jpg','king_of_clubss.jpg','jack_of_hearts.jpg','jack_of_clubs.jpg','queen_of_diamonds.jpg',
-                          'jack_of_diamonds.jpg','king_of_hearts.jpg','king_of_spades.jpg','king_of_diamonds.jpg', 'queen_of_spades.jpg',
-                          'queen_of_hearts.jpg', 'queen_of_clubs.jpg'
+                          //'jack_of_diamonds.jpg','king_of_hearts.jpg','king_of_spades.jpg','king_of_diamonds.jpg', 'queen_of_spades.jpg',
+                          //'queen_of_hearts.jpg', 'queen_of_clubs.jpg'
                           ];
             this.render();
         },
         render: function(){
+            this.test();
             $(this.el).append('<button id="newGame">Start new game</button><section id="card-container" class="clearfix"></section>');
+        },
+        test:function(){
+            console.log(this.cards)
         },
         newGame: function(){
             $('#card-container').html('');
