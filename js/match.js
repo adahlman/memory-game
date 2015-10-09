@@ -79,10 +79,7 @@
             this.collection = new CardDeck();
             this.collection.bind('add',this.addCard);
             this.imagebase = 'https://playingcardcollector.files.wordpress.com/2013/02/playing_cards_by_mushfacecomics_';
-            this.cards = ['ace_of_spades.jpg','jack_of_spades.jpg','king_of_clubss.jpg','jack_of_hearts.jpg','jack_of_clubs.jpg','queen_of_diamonds.jpg',
-                          //'jack_of_diamonds.jpg','king_of_hearts.jpg','king_of_spades.jpg','king_of_diamonds.jpg', 'queen_of_spades.jpg',
-                          //'queen_of_hearts.jpg', 'queen_of_clubs.jpg'
-                          ];
+            this.cards = [];
             this.render();
         },
         render: function(){
@@ -98,6 +95,17 @@
             this.remainingCards= 6;
             this.card1=null;
             this.progress = false;
+            this.cards.length = 0;
+            var deckOptions = ['ace_of_spades.jpg','jack_of_spades.jpg','king_of_clubss.jpg','jack_of_hearts.jpg','jack_of_clubs.jpg','queen_of_diamonds.jpg',
+                          'jack_of_diamonds.jpg','king_of_hearts.jpg','king_of_spades.jpg','king_of_diamonds.jpg', 'queen_of_spades.jpg',
+                          'queen_of_hearts.jpg', 'queen_of_clubs.jpg'
+                          ];
+            while(this.cards.length < this.remainingCards){
+                var random = Math.floor(Math.random()*deckOptions.length);
+                if (this.cards.indexOf(deckOptions[random]) < 0) {
+                    this.cards.push(deckOptions[random]);
+                }
+            }
             for(var i = 1; i <= this.remainingCards; i++){
                 for(var j =0; j < 2; j++){
                     var card = new Card({number: i});
