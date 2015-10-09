@@ -43,7 +43,7 @@
                 if (this.model.attributes.number == deckView.card1.model.attributes.number) {
                     // if no cards are remaining, the game is over
                     if (!(--deckView.remainingCards)) {
-                         console.log('You win');
+                         alert('You win');
                          return;
                      }
                 }else{
